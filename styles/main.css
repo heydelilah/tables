@@ -1,0 +1,17 @@
+input[type="checkbox"] {
+  margin: 0px;
+}
+.gridHeader {
+  overflow: hidden;
+  width: 684px;
+}
+.gridSidebar {
+  overflow: hidden;
+  height: 130px;
+}
+.gridContent {
+  overflow: scroll;
+  width: 700px;
+  height: 150px;
+  position: relative;
+}
