@@ -11,8 +11,14 @@ td {
 .fl {
   float: left;
 }
+.fr {
+  float: right;
+}
 .cl {
   clear: left;
+}
+.cr {
+  clear: right;
 }
 .uk-text-truncate {
   overflow: hidden;
@@ -73,6 +79,8 @@ td {
 }
 .gridSidebar {
   overflow: hidden;
+  position: relative;
+  z-index: 1;
 }
 .gridSidebar tr {
   line-height: 40px;
@@ -97,4 +105,7 @@ td {
 .gridContent td {
   border: solid #EAEAEA;
   border-width: 0 1px 1px 0;
+}
+.grid .act {
+  box-shadow: 1px 0px 3px #ddd;
 }

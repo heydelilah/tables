@@ -30,7 +30,7 @@ Grid.prototype = {
 	build: function(data){
 		var layout = this.$el = $([
 			'<div class="grid">',
-				'<div class="cl">',
+				'<div>',
 					'<div class="gridCorner fl"></div>',
 					'<div class="gridHeader fl"></div>',
 				'</div>',
@@ -288,4 +288,13 @@ Grid.prototype = {
 fnScroll = function(){
 	$('.gridHeader').scrollLeft($('.gridContent').scrollLeft());
 	$('.gridSidebar').scrollTop($('.gridContent').scrollTop());
+
+	var left = $('.gridHeader').scrollLeft();
+	var el = $('.gridSidebar');
+	if(left){
+		el.addClass('act');
+	}else{
+		el.removeClass('act');
+	}
+	// console.log($('.gridHeader').scrollLeft())
 };

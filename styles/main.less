@@ -16,8 +16,14 @@ td{
 .fl{
 	float: left;
 }
+.fr{
+	float: right;
+}
 .cl{
 	clear: left;
+}
+.cr{
+	clear: right;
 }
 .uk-text-truncate {
 	overflow: hidden;
@@ -34,6 +40,7 @@ td{
 
 
 /** ---------- Grid ---------- **/
+
 .grid{
 	font-family: "Microsoft YaHei",Arial, Helvetica, sans-serif;
 	background: #fffff;
@@ -87,8 +94,11 @@ td{
 				}
 		}
 	}
+
 	&Sidebar{
 		overflow: hidden;
+		position: relative;
+		z-index: 1;
 		tr{
 			line-height: 40px;
 		}
@@ -98,9 +108,12 @@ td{
 		td{
 			border: solid #EAEAEA;
 			border-width: 0 1px 1px 0;
-
 		}
 	}
+		// .act td{
+		// 	border-right: 1px solid #888;
+		// 	bor
+		// }
 	&Content{
 		overflow: scroll;
 		position:relative;
@@ -120,4 +133,8 @@ td{
 
 		}
 	}
+		.act{
+			box-shadow: 1px 0px 3px #ddd;
+			// border-right: 1px solid #888;
+		}
 }
