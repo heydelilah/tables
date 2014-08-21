@@ -1,17 +1,100 @@
 input[type="checkbox"] {
   margin: 0px;
 }
+.wrapper {
+  margin: 30px auto;
+}
+td {
+  padding: 0 12px;
+}
+/** ---------- Base ---------- **/
+.fl {
+  float: left;
+}
+.cl {
+  clear: left;
+}
+.uk-text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.left {
+  text-align: left;
+}
+.center {
+  text-align: center;
+}
+/** ---------- Grid ---------- **/
+.grid {
+  font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif;
+  background: #fffff;
+  overflow: hidden;
+  font-size: 13px;
+  color: #444;
+  text-align: right;
+  border: 1px solid #eaeaea;
+}
+.gridCorner {
+  background: #f8f8f8;
+}
+.gridCornerHook {
+  line-height: 40px;
+  text-align: center;
+}
+.gridCornerHook td {
+  border-right: 1px solid #f8f8f8;
+  border-bottom: 1px solid #c8cdcc;
+}
+.gridCornerAmount {
+  text-align: center;
+  padding: 0px;
+  border-bottom: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
+}
 .gridHeader {
   overflow: hidden;
-  width: 684px;
+  background: #f8f8f8;
+}
+.gridHeaderTitle {
+  line-height: 40px;
+  text-align: center;
+}
+.gridHeaderTitle td {
+  border-right: 1px solid #f8f8f8;
+  border-bottom: 1px solid #c8cdcc;
+}
+.gridHeaderAmount {
+  line-height: 60px;
+}
+.gridHeaderAmount td {
+  border: solid #EAEAEA;
+  border-width: 0 1px 1px 0;
 }
 .gridSidebar {
   overflow: hidden;
-  height: 130px;
+}
+.gridSidebar tr {
+  line-height: 40px;
+}
+.gridSidebar tr.odd {
+  background: #f8f8f8;
+}
+.gridSidebar td {
+  border: solid #EAEAEA;
+  border-width: 0 1px 1px 0;
 }
 .gridContent {
   overflow: scroll;
-  width: 700px;
-  height: 150px;
   position: relative;
+}
+.gridContent tr {
+  line-height: 40px;
+}
+.gridContent tr.odd {
+  background: #f8f8f8;
+}
+.gridContent td {
+  border: solid #EAEAEA;
+  border-width: 0 1px 1px 0;
 }
