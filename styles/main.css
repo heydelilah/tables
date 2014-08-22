@@ -1,11 +1,5 @@
-input[type="checkbox"] {
-  margin: 0px;
-}
 .wrapper {
   margin: 30px auto;
-}
-td {
-  padding: 0 12px;
 }
 /** ---------- Base ---------- **/
 .fl {
@@ -41,6 +35,9 @@ td {
   text-align: right;
   border: 1px solid #eaeaea;
 }
+.grid table td {
+  padding: 0 12px;
+}
 .gridCorner {
   background: #f8f8f8;
 }
@@ -49,12 +46,17 @@ td {
   text-align: center;
 }
 .gridCornerHook td {
+  white-space: nowrap;
   border-right: 1px solid #f8f8f8;
   border-bottom: 1px solid #c8cdcc;
 }
 .gridCornerAmount {
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
   text-align: center;
-  padding: 0px;
+}
+.gridCornerAmount td {
   border-bottom: 1px solid #eaeaea;
   border-right: 1px solid #eaeaea;
 }
@@ -62,11 +64,15 @@ td {
   overflow: hidden;
   background: #f8f8f8;
 }
+.gridHeader table {
+  min-width: 100%;
+}
 .gridHeaderTitle {
   line-height: 40px;
   text-align: center;
 }
 .gridHeaderTitle td {
+  white-space: nowrap;
   border-right: 1px solid #f8f8f8;
   border-bottom: 1px solid #c8cdcc;
 }
@@ -92,9 +98,17 @@ td {
   border: solid #EAEAEA;
   border-width: 0 1px 1px 0;
 }
+.gridSidebarMenu {
+  background: url('img/menu.png') 0 0 no-repeat;
+  padding: 7px;
+  display: inline-block;
+}
 .gridContent {
-  overflow: scroll;
+  overflow: auto;
   position: relative;
+}
+.gridContent table {
+  min-width: 100%;
 }
 .gridContent tr {
   line-height: 40px;
@@ -106,6 +120,20 @@ td {
   border: solid #EAEAEA;
   border-width: 0 1px 1px 0;
 }
+.grid .gridLayoutLeft {
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+.grid .gridLayoutLeft:before {
+  box-shadow: 7px 0 18px -12px inset;
+  content: " ";
+  height: 100%;
+  right: -15px;
+  position: absolute;
+  top: 0;
+  width: 15px;
+}
 .grid .act {
-  box-shadow: 1px 0px 3px #ddd;
+  overflow: visible;
 }
