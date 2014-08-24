@@ -14,19 +14,19 @@
 var data = Mock.mock(
 	{
 		'amount|7': {
-			'cpc|1000000000-2000000000': 100,
-			'cpm|1-100000': 100,
-			'cpa|1-200': 100,
-			'clicks|1-100000': 100,
-			'regs|1-100000': 100,
-			'rate|1-100000': 100,
-			'price|1-100000': 100
+			'cpc|100000000000-20000000000000': 100,
+			'cpm|1-10000': 100,
+			'cpa|100000-1000000000': 100,
+			'clicks|1-10000': 100,
+			'regs|1-1': 100,
+			'rate|1-10000': 100,
+			'price|1': 100
 		},
-		'items|1': [
+		'items|6': [
 			{
 				'id|+1': 1,
 				'name|0-1': 'test',
-				'cpc|1-1000': 100,
+				'cpc|1-100': 100,
 				'cpm|1-100': 100,
 				'cpa|1-100': 100,
 				'clicks|1-100': 100,
@@ -36,14 +36,13 @@ var data = Mock.mock(
 
 				,'checkbox|1': '口',
 				'op|1': '操作',
-				'test|0-1': 'test'
+				'test|1': 'test'
 			}
 		]
 	}
 
 );
 console.log(data);
-
 
 var wrapper = $('<div class="wrapper"></div>');
 // var wrapper = $('body');
