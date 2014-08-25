@@ -35,7 +35,7 @@ Grid.prototype = {
 					'<div class="gridSidebar"></div>',
 				'</div>',
 				'<div class="gridLayoutRight">',
-					'<div class="gridHeader"></div>',
+					'<div class="scrollerPadding"><div class="gridHeader"></div></div>',
 					'<div class="gridContent"></div>',
 				'</div>',
 			'</div>'
@@ -339,8 +339,10 @@ Grid.prototype = {
 		if(isReset){
 			header.width(wrap.width() - width);
 			content.width(wrap.width() - width);
-			header.find('table').width(wrap.width() - width);
-			content.find('table').width(wrap.width() - width);
+			// header.find('table').width(wrap.width() - width);
+			// content.find('table').width(wrap.width() - width);
+			header.find('table').css('width','auto')
+			content.find('table').css('width','auto')
 		}
 		// for (i = 0; i < indexLen; i++) {
 		// 	// 总计模块
@@ -379,7 +381,7 @@ Grid.prototype = {
 		}
 
 		// 出现滚动条时，要减去滚动条的宽度
-		var hasScollerV = (sidebar.height() > wrap.height()) ? true : false;
+		var hasScollerV = (sidebar.find('table').height() > (wrap.height()-wrap.find('.gridCorner').height())) ? true : false;
 		var hasScollerH = (sum > content.width()) ? true : false;
 		var scollerV = hasScollerV ? 17: 0;
 		var scollerH = hasScollerH ? 17: 0;
@@ -391,7 +393,7 @@ Grid.prototype = {
 		header.find('table').width(sum);
 		content.find('table').width(sum)
 
-		if(hasScollerV){
+		if(isReset && hasScollerV){
 			console.log('hasScollerV')
 			header.width(header.width() - scollerV)
 		}

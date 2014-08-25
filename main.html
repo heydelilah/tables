@@ -18,11 +18,11 @@ var data = Mock.mock(
 			'cpm|1-10000': 100,
 			'cpa|100000-1000000000': 100,
 			'clicks|1-10000': 100,
-			'regs|1-1': 100,
+			'regs|1-10': 100,
 			'rate|1-10000': 100,
-			'price|1': 100
+			'price|1-10': 100
 		},
-		'items|36': [
+		'items|6': [
 			{
 				'id|+1': 1,
 				'name|0-1000': 'test',
@@ -34,7 +34,7 @@ var data = Mock.mock(
 				'rate|1-100': 100,
 				'price|1-100': 100
 
-				,'test|14': 'test'
+				,'test|19': 'test'
 			}
 		]
 	}
@@ -45,7 +45,7 @@ console.log(data);
 // var wrapper = $('<div class="wrapper"></div>');
 var wrapper = $('body');
 wrapper.css({
-	// width: '1000px',
+	width: '1000px',
 	height: '500px'
 }).appendTo($('body'));
 

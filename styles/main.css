@@ -135,6 +135,9 @@
   top: 0;
   width: 15px;
 }
+.grid .gridLayoutRight .scrollerPadding {
+  padding-right: 17px;
+}
 .grid .shadow {
   overflow: visible;
 }
