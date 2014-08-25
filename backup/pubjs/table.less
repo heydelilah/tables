@@ -1,0 +1,132 @@
+.grid{
+	font-family: "Microsoft YaHei",Arial, Helvetica, sans-serif;
+	background: #F8F8F8;
+	overflow: hidden;
+	font-size: 13px;
+	color: #444;
+	text-align: right;
+	border: 1px solid #eaeaea;
+
+	table{
+		border-collapse: separate;
+	}
+
+	td{
+		padding: 0 12px;
+		overflow: hidden;
+		line-height: inherit; // 为了重置unkit的line-height值
+		white-space: nowrap;
+
+		// -moz-box-sizing: border-box;
+		// -webkit-box-sizing:border-box;
+		// box-sizing: border-box;
+	}
+
+	&Corner{
+		background: #f8f8f8;
+		&Hook{
+			line-height: 40px;
+			text-align: center;
+			td{
+				border-right: 1px solid transparent;
+				border-bottom: 1px solid #c8cdcc;
+			}
+		}
+		&Amount{
+			z-index: 1;
+			overflow: hidden;
+			position: relative;
+			text-align: center;
+			td{
+				border-bottom: 1px solid #eaeaea;
+				border-right: 1px solid #eaeaea;
+			}
+		}
+	}
+	&Header{
+		overflow:hidden;
+		background: #f8f8f8;
+		table{
+			min-width: 100%;
+		}
+		&Title{
+			line-height: 40px;
+			text-align: center;
+			td{
+				border-right: 1px solid transparent;
+				border-bottom: 1px solid #c8cdcc;
+			}
+		}
+		&Amount{
+				line-height: 60px;
+				td{
+					border: solid #EAEAEA;
+					border-width: 0 1px 1px 0;
+				}
+		}
+	}
+	&Sidebar{
+		overflow: hidden;
+		position: relative;
+		z-index: 1;
+		tr{
+			line-height: 40px;
+		}
+		tr.even{
+			background: #ffffff;
+		}
+		td{
+			border: solid #EAEAEA;
+			border-width: 0 1px 1px 0;
+		}
+		// 操作图标
+		&Menu{
+			background: url('img/menu.png') 0 0 no-repeat;
+			padding: 7px;
+			display: inline-block;
+
+		}
+	}
+	&Content{
+		// overflow: auto;
+		position:relative;
+		table{
+			min-width: 100%;
+		}
+		tr{
+			line-height: 40px;
+		}
+		tr.even{
+			background: #ffffff;
+		}
+		td{
+			border: solid #EAEAEA;
+			border-width: 0 1px 1px 0;
+		}
+	}
+	.gridLayoutLeft{
+		z-index: 2;
+		overflow: hidden;
+		position: relative;
+	}
+	.gridLayoutLeft:before {
+		// box-shadow: 7px 0 18px -12px inset;
+		box-shadow: 7px 0 18px -12px inset;
+		content: " ";
+		height: 100%;
+		right: -15px;
+		position: absolute;
+		top: 0;
+		width: 15px;
+	}
+	.gridLayoutRight{
+		.scrollerPadding{
+			padding-right: 12px;
+		}
+	}
+
+	.shadow{
+		overflow: visible;
+	}
+
+}
