@@ -22,10 +22,10 @@ var data = Mock.mock(
 			'rate|1-10000': 100,
 			'price|1': 100
 		},
-		'items|6': [
+		'items|36': [
 			{
 				'id|+1': 1,
-				'name|0-1': 'test',
+				'name|0-1000': 'test',
 				'cpc|1-100': 100,
 				'cpm|1-100': 100,
 				'cpa|1-100': 100,
@@ -34,9 +34,7 @@ var data = Mock.mock(
 				'rate|1-100': 100,
 				'price|1-100': 100
 
-				,'checkbox|1': '口',
-				'op|1': '操作',
-				'test|1': 'test'
+				,'test|14': 'test'
 			}
 		]
 	}
@@ -44,10 +42,10 @@ var data = Mock.mock(
 );
 console.log(data);
 
-var wrapper = $('<div class="wrapper"></div>');
-// var wrapper = $('body');
+// var wrapper = $('<div class="wrapper"></div>');
+var wrapper = $('body');
 wrapper.css({
-	width: '1000px',
+	// width: '1000px',
 	height: '500px'
 }).appendTo($('body'));
 

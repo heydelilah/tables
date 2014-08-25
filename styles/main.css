@@ -28,15 +28,18 @@
 /** ---------- Grid ---------- **/
 .grid {
   font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif;
-  background: #fffff;
+  background: #F8F8F8;
   overflow: hidden;
   font-size: 13px;
   color: #444;
   text-align: right;
   border: 1px solid #eaeaea;
 }
-.grid table td {
+.grid td {
   padding: 0 12px;
+  overflow: hidden;
+  line-height: inherit;
+  white-space: nowrap;
 }
 .gridCorner {
   background: #f8f8f8;
@@ -46,14 +49,13 @@
   text-align: center;
 }
 .gridCornerHook td {
-  white-space: nowrap;
   border-right: 1px solid #f8f8f8;
   border-bottom: 1px solid #c8cdcc;
 }
 .gridCornerAmount {
+  z-index: 1;
   overflow: hidden;
   position: relative;
-  z-index: 1;
   text-align: center;
 }
 .gridCornerAmount td {
@@ -72,7 +74,6 @@
   text-align: center;
 }
 .gridHeaderTitle td {
-  white-space: nowrap;
   border-right: 1px solid #f8f8f8;
   border-bottom: 1px solid #c8cdcc;
 }
@@ -91,8 +92,8 @@
 .gridSidebar tr {
   line-height: 40px;
 }
-.gridSidebar tr.odd {
-  background: #f8f8f8;
+.gridSidebar tr.even {
+  background: #ffffff;
 }
 .gridSidebar td {
   border: solid #EAEAEA;
@@ -113,17 +114,17 @@
 .gridContent tr {
   line-height: 40px;
 }
-.gridContent tr.odd {
-  background: #f8f8f8;
+.gridContent tr.even {
+  background: #ffffff;
 }
 .gridContent td {
   border: solid #EAEAEA;
   border-width: 0 1px 1px 0;
 }
 .grid .gridLayoutLeft {
+  z-index: 2;
   overflow: hidden;
   position: relative;
-  z-index: 2;
 }
 .grid .gridLayoutLeft:before {
   box-shadow: 7px 0 18px -12px inset;
@@ -134,6 +135,6 @@
   top: 0;
   width: 15px;
 }
-.grid .act {
+.grid .shadow {
   overflow: visible;
 }

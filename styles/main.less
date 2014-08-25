@@ -35,16 +35,18 @@
 
 .grid{
 	font-family: "Microsoft YaHei",Arial, Helvetica, sans-serif;
-	background: #fffff;
+	background: #F8F8F8;
 	overflow: hidden;
 	font-size: 13px;
 	color: #444;
 	text-align: right;
 	border: 1px solid #eaeaea;
 
-	table td{
+	td{
 		padding: 0 12px;
 		overflow: hidden;
+		line-height: inherit;
+		white-space: nowrap;
 
 		// -moz-box-sizing: border-box;
 		// -webkit-box-sizing:border-box;
@@ -57,15 +59,14 @@
 			line-height: 40px;
 			text-align: center;
 			td{
-				white-space: nowrap;
 				border-right: 1px solid #f8f8f8;
 				border-bottom: 1px solid #c8cdcc;
 			}
 		}
 		&Amount{
+			z-index: 1;
 			overflow: hidden;
 			position: relative;
-			z-index: 1;
 			text-align: center;
 			td{
 				border-bottom: 1px solid #eaeaea;
@@ -83,7 +84,6 @@
 			line-height: 40px;
 			text-align: center;
 			td{
-				white-space: nowrap;
 				border-right: 1px solid #f8f8f8;
 				border-bottom: 1px solid #c8cdcc;
 			}
@@ -103,8 +103,8 @@
 		tr{
 			line-height: 40px;
 		}
-		tr.odd{
-			background: #f8f8f8;
+		tr.even{
+			background: #ffffff;
 		}
 		td{
 			border: solid #EAEAEA;
@@ -128,8 +128,8 @@
 		tr{
 			line-height: 40px;
 		}
-		tr.odd{
-			background: #f8f8f8;
+		tr.even{
+			background: #ffffff;
 		}
 		td{
 			border: solid #EAEAEA;
@@ -137,9 +137,9 @@
 		}
 	}
 	.gridLayoutLeft{
+		z-index: 2;
 		overflow: hidden;
 		position: relative;
-		z-index: 2;
 	}
 	.gridLayoutLeft:before {
 		// box-shadow: 7px 0 18px -12px inset;
@@ -152,7 +152,7 @@
 		width: 15px;
 	}
 
-	.act{
+	.shadow{
 		overflow: visible;
 	}
 

@@ -11,7 +11,7 @@ window.Grid = function(config){
 			{name: 'cpa', text: 'CPA'},
 			{name: 'clicks', text: '点击量'},
 			{name: 'regs', text: '注册量'},
-			// {name: 'test', text: '字符串'},
+			{name: 'test', text: '字符串'},
 			{name: 'rate', text: '比率'},
 			{name: 'price', text: '价格'}
 		],
@@ -53,14 +53,20 @@ Grid.prototype = {
 		this.buildTableContent().appendTo(doms.tableContent);
 
 		// 绑定滚动事件
-		this.$doms.tableContent.on('scroll', this.scroll);
+		this.$doms.tableContent.on('scroll', this.scrolling);
 
 		this.$config.target.append(layout);
 
+		// 绑定窗口改变大小事件
 		$(window).resize(this.eventResize);
 	},
 	eventResize: function(ev){
-		table.calculate(true)
+		// 防止连续不断广播事件
+		clearTimeout(this.$timeoutId);
+		this.$timeoutId = setTimeout(function(){
+			table.calculate(true);
+		}, 150);
+		return false;
 	},
 	buildTd: function(c){
 		var td = con = $('<td></td>');
@@ -164,9 +170,14 @@ Grid.prototype = {
 
 			// 总计模块
 			if(c.hasAmount){
-				elAmount = this.buildTd({
-					'text': data[indicator[i].name] || '-'
-				});
+				if(data){
+					elAmount = this.buildTd({
+						'text': data[indicator[i].name] || '-'
+					});
+
+				}else{
+					elAmount = '<td>-</td>';
+				}
 				amount.push(elAmount);
 			}
 		};
@@ -185,64 +196,72 @@ Grid.prototype = {
 
 		var dom = $('<table cellspacing="0" cellpadding="0"/>');
 
-		var tr;
-		var data, col;
-		var html, width, isIndexCol, className, title, type;
-		var className = '';
+		if(datas){
+			var tr;
+			var data, col;
+			var html, width, isIndexCol, className, title, type;
+			var className = '';
 
-		for (var i = 0; i < datas.length; i++) {
-			data = datas[i];
+			for (var i = 0; i < datas.length; i++) {
+				data = datas[i];
 
-			tr = this.buildTr({
-				'class': (i%2!==0) ? 'gridSidebarName odd' : 'gridSidebarName'
-			});
-
-			for (var ii = 0; ii < cols.length; ii++) {
-				column = cols[ii];
-
-				isIndexCol = column.type == 'index';
-
-				// 选择列
-				if(column.type == 'select'){
-					html = '<input type="checkbox" />';
-				}
-
-				// 操作列
-				if(column.type == 'op'){
-					html = '<span class="gridSidebarMenu"/>';
-					className += ' center';
-				}
-
-				if(column.render){
-					html = this[column.render](ii, data[column.name], data, column);
-				}
-				if(column.width){
-					width = column.width;
-				}
-				if(column.align){
-					className += ' '+ column.align;
-				}
-
-				if(isIndexCol){
-					width = width || 150;
-					className += ' '+ 'uk-text-truncate';
-					title = data[column.name];
-					type = 'index';
-				}
-				td = this.buildTd({
-					'text': data[column.name],
-					'html': html,
-					'width': width,
-					'class': className,
-					'title': title,
-					'type': type
+				tr = this.buildTr({
+					'class': (i%2!==0) ? 'gridSidebarName' : 'gridSidebarName even'
 				});
-				tr.append(td);
-				// 清除变量
-				html = width = className = type= title= '';
+
+				for (var ii = 0; ii < cols.length; ii++) {
+					column = cols[ii];
+
+					isIndexCol = column.type == 'index';
+
+					// 选择列
+					if(column.type == 'select'){
+						html = '<input type="checkbox" />';
+					}
+
+					// 操作列
+					if(column.type == 'op'){
+						html = '<span class="gridSidebarMenu"/>';
+						className += ' center';
+					}
+
+					if(column.render){
+						html = this[column.render](ii, data[column.name], data, column);
+					}
+					if(column.width){
+						width = column.width;
+					}
+					if(column.align){
+						className += ' '+ column.align;
+					}
+
+					if(isIndexCol){
+						width = width || 150;
+						className += ' '+ 'uk-text-truncate';
+						title = data[column.name];
+						type = 'index';
+					}
+					td = this.buildTd({
+						'text': data[column.name],
+						'html': html,
+						'width': width,
+						'class': className,
+						'title': title,
+						'type': type
+					});
+					tr.append(td);
+					// 清除变量
+					html = width = className = type= title= '';
+				};
+				dom.append(tr);
 			};
-			dom.append(tr);
-		};
+		}else{
+			var tds = [];
+			for (i = 0; i < cols.length; i++) {
+				tds.push('<td>-</td>');
+			}
+			dom.append($('<tr class="gridSidebarName even"></tr>').append(tds));
+		}
 		return dom;
 	},
 	buildTableContent: function(){
@@ -250,21 +269,26 @@ Grid.prototype = {
 		var cols = this.$config.indicator;
 
 		var html = $('<table  cellspacing="0" cellpadding="0"/>');
-		var tr;
-		for (var i = 0; i < data.length; i++) {
+		if(data){
+			var tr;
+			for (var i = 0; i < data.length; i++) {
 
-			tr = this.buildTr({
-				'class': (i===0 )? 'gridContentFirstTr': ((i%2 !== 0)?'odd':'')
-			});
-
-			for (var ii = 0; ii < cols.length; ii++) {
-				td = this.buildTd({
-					text: data[i][cols[ii].name] || '-'
+				tr = this.buildTr({
+					'class': (i===0 )? 'gridContentFirstTr even': ((i%2 === 0)?'even':'')
 				});
-				tr.append(td);
-			};
-			html.append(tr);
-		};
+
+				for (var ii = 0; ii < cols.length; ii++) {
+					td = this.buildTd({
+						text: data[i][cols[ii].name] || '-'
+					});
+					tr.append(td);
+				};
+				html.append(tr);
+			}
+		}else{
+			html.append('<tr class="even"><td class="center" colspan="'+cols.length+'">无数据</td></tr>')
+		}
+
 		return html;
 	},
 	renderName: function(i, val, data, con){
@@ -273,13 +297,13 @@ Grid.prototype = {
 		}
 		return $('<div class="uk-text-truncate left" title="'+val+'">'+val+'</div>').width(con.width);
 	},
-	calculate: function(re){
+	calculate: function(isReset){
 		var c = this.$config,
 			wrap = c.target,
 			data = this.$data;
 
 		// 长度定义
-		var datasLen = data.items.length,
+		var datasLen = data.items && data.items.length || 0,
 			indexLen = c.indicator.length,
 			colsLen = c.cols.length;
 
@@ -312,8 +336,12 @@ Grid.prototype = {
 		var className = '';
 
 		// 清零
-		header.find('table').width(width);
-		content.find('table').width(sum)
+		if(isReset){
+			header.width(wrap.width() - width);
+			content.width(wrap.width() - width);
+			header.find('table').width(wrap.width() - width);
+			content.find('table').width(wrap.width() - width);
+		}
 		// for (i = 0; i < indexLen; i++) {
 		// 	// 总计模块
 		// 	className = c.hasAmount ? 'gridHeaderAmount' : 'gridHeaderTitle';
@@ -358,15 +386,14 @@ Grid.prototype = {
 		var border = 2;
 
 		// 设置容器宽高
-		// 固定下table的宽度，窗口变化时候使得不自适应，方便重计算
-		if(re){
-		header.find('table').width(width);
-		content.find('table').width(width)
-
-		}
+		// 固定下table的宽度，窗口变化时候使得不自适应，
+		// 使得窗口过于小的时候，也有一个最小宽度
+		header.find('table').width(sum);
+		content.find('table').width(sum)
 
 		if(hasScollerV){
-			header.width(sum - scollerV)
+			console.log('hasScollerV')
+			header.width(header.width() - scollerV)
 		}
 
 		var height = wrap.height()
@@ -377,7 +404,7 @@ Grid.prototype = {
 		// return Math.round(a>b ? a : b);
 		return a>b ? a : b;
 	},
-	scroll: function(ev){
+	scrolling: function(ev){
 		var content = $(ev.target);
 		var header = $('.gridHeader');
 		var sidebar = $('.gridSidebar');
@@ -390,9 +417,9 @@ Grid.prototype = {
 
 		var el = $('.gridLayoutLeft');
 		if(left){
-			el.addClass('act');
+			el.addClass('shadow');
 		}else{
-			el.removeClass('act');
+			el.removeClass('shadow');
 		}
 	}
 };
