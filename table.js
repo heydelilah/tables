@@ -35,7 +35,7 @@ Grid.prototype = {
 					'<div class="gridSidebar"></div>',
 				'</div>',
 				'<div class="gridLayoutRight">',
-					'<div class="scrollerPadding"><div class="gridHeader"></div></div>',
+					'<div class="gridHeader"></div>',
 					'<div class="gridContent"></div>',
 				'</div>',
 			'</div>'
@@ -310,61 +310,13 @@ Grid.prototype = {
 		// DOM实例
 		var header = wrap.find('.gridHeader'),
 			content = wrap.find('.gridContent'),
-			sidebar = wrap.find('.gridSidebar');
+			sidebar = wrap.find('.gridSidebar'),
+			corner = wrap.find('.gridCorner');
 
 		var sum = 0,			// 总数
 			max,			// 最大值
 			space,			// 间距
 			elT, elD, elL, elR;	// DOM对象
-
-
-		// 同步宽度-左侧
-		for (i = 0; i < colsLen; i++) {
-			elT = wrap.find('.gridCornerTitle:eq('+i+')');
-			elD = wrap.find('.gridSidebar td:eq('+i+')');
-			max = this.max(elT.width(), elD.width());
-			elT.width(max);
-			elD.width(max);
-		}
-
-		// 设置主内容模块的左边距值
-		var width = wrap.find('.gridLayoutLeft').width();
-		wrap.find('.gridLayoutRight').css('margin-left', width);
-
-
-		var hasAmount = c.hasAmount;
-		var className = '';
-
-		// 清零
-		if(isReset){
-			header.width(wrap.width() - width);
-			content.width(wrap.width() - width);
-			// header.find('table').width(wrap.width() - width);
-			// content.find('table').width(wrap.width() - width);
-			header.find('table').css('width','auto')
-			content.find('table').css('width','auto')
-		}
-		// for (i = 0; i < indexLen; i++) {
-		// 	// 总计模块
-		// 	className = c.hasAmount ? 'gridHeaderAmount' : 'gridHeaderTitle';
-		// 	elT = wrap.find('.'+className).find('td:eq('+i+')');
-		// 	elD = wrap.find('.gridContentFirstTr td:eq('+i+')');
-		// 	elT.css('width', 'none');
-		// 	elD.css('width', 'none');
-		// }
-
-		// 同步宽度-右侧
-		for (i = 0; i < indexLen; i++) {
-			// 总计模块
-			className = c.hasAmount ? 'gridHeaderAmount' : 'gridHeaderTitle';
-			elT = wrap.find('.'+className).find('td:eq('+i+')');
-			elD = wrap.find('.gridContentFirstTr td:eq('+i+')');
-			space = elT.outerWidth() - elT.width();
-			max = this.max(elT.width(), elD.width());
-			sum = sum + max + space;
-			elT.width(max);
-			elD.width(max);
-		}
 
 		// 同步高度-汇总模块
 		elL = wrap.find('.gridCornerAmount');
@@ -380,30 +332,63 @@ Grid.prototype = {
 			elR.height(max);
 		}
 
-		// 出现滚动条时，要减去滚动条的宽度
-		var hasScollerV = (sidebar.find('table').height() > (wrap.height()-wrap.find('.gridCorner').height())) ? true : false;
-		var hasScollerH = (sum > content.width()) ? true : false;
-		var scollerV = hasScollerV ? 17: 0;
-		var scollerH = hasScollerH ? 17: 0;
 		var border = 2;
+		var scrollerLen = 17;
+		var height = wrap.height()-corner.height();
+		sidebar.height(height-border-scrollerLen);
+		content.height(height-border);
 
-		// 设置容器宽高
-		// 固定下table的宽度，窗口变化时候使得不自适应，
-		// 使得窗口过于小的时候，也有一个最小宽度
-		header.find('table').width(sum);
-		content.find('table').width(sum)
 
-		if(isReset && hasScollerV){
-			console.log('hasScollerV')
-			header.width(header.width() - scollerV)
+		// 同步宽度-左侧
+		for (i = 0; i < colsLen; i++) {
+			elT = wrap.find('.gridCornerTitle:eq('+i+')');
+			elD = wrap.find('.gridSidebar td:eq('+i+')');
+			max = this.max(elT.width(), elD.width());
+			elT.width(max);
+			elD.width(max);
 		}
 
-		var height = wrap.height()
-		sidebar.css('height', height-scollerH -border);
-		content.css('height', height);
+		// 设置主内容模块的左边距值
+		var conLeftWidth = wrap.find('.gridLayoutLeft').width();
+		wrap.find('.gridLayoutRight').css('margin-left', conLeftWidth);
+
+		var className = '';
+		// 清零
+		if(isReset){
+			header.width(wrap.width() - conLeftWidth);
+			content.width(wrap.width() - conLeftWidth);
+			header.find('table').css('width','auto');
+			content.find('table').css('width','auto');
+			for (i = 0; i < indexLen; i++) {
+				// 总计模块
+				className = c.hasAmount ? 'gridHeaderAmount' : 'gridHeaderTitle';
+				elT = wrap.find('.'+className).find('td:eq('+i+')');
+				elD = wrap.find('.gridContentFirstTr td:eq('+i+')');
+				elT.css('width', 'auto');
+				elD.css('width', 'auto');
+			}
+		}
+
+		// 同步宽度-右侧
+		for (i = 0; i < indexLen; i++) {
+			// 总计模块
+			className = c.hasAmount ? 'gridHeaderAmount' : 'gridHeaderTitle';
+			elT = wrap.find('.'+className).find('td:eq('+i+')');
+			elD = wrap.find('.gridContentFirstTr td:eq('+i+')');
+			space = elT.outerWidth() - elT.width();
+			max = this.max(elT.width(), elD.width());
+			sum = sum + max + space;
+			elT.width(max);
+			elD.width(max);
+		}
+		// 更新表格宽度值，使每一列能以计算值呈现出来
+		header.find('table').width(sum);
+		content.find('table').width(sum);
+
+		content.css('max-width',wrap.width() - conLeftWidth);
+		header.width(header.width() - scrollerLen)
 	},
 	max: function(a, b){
-		// return Math.round(a>b ? a : b);
 		return a>b ? a : b;
 	},
 	scrolling: function(ev){
