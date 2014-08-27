@@ -1,37 +1,35 @@
 define(function(require, exports){
 	var $ = require('jquery');
-	var pubjs = require('@core/pub');
-	var util = require('util');
 	var view = require('@base/view');
-	var mock = require('mock');
 
 	// 模拟数据
+	require('mock');
 	var data = Mock.mock(
 		{
 			'amount|7': {
-				'cpc|100000000000-20000000000000': 100,
-				'cpm|1-10000': 100,
-				'cpa|100000-1000000000': 100,
-				'clicks|1-10000': 100,
-				'regs|1-1': 100,
-				'rate|1-10000': 100,
-				'price|1': 100
+				'cpc|10000-200000000': 100,
+				'cpm|1-1000': 100,
+				'cpa|1-100': 100,
+				'clicks|1-10': 100,
+				'regs|1-10': 100,
+				'rate|1-10': 100,
+				'price|1-10': 100
 			},
-			'items|8': [
+			'items|28': [
 				{
 					'id|+1': 1,
 					'name|0-10': 'test',
-					'cpc|1-100': 100,
-					'cpm|1-100': 100,
-					'cpa|1-100': 100,
-					'clicks|1-100': 100,
+					'cpc|10-100000': 100,
+					'cpm|10-100000': 100,
+					'cpa|10-100000': 100,
+					'clicks|1-1000': 100,
 					'regs|1-100': 100,
 					'rate|1-100': 100,
 					'price|1-100': 100
 
 					// ,'checkbox|1': '口',
 					// 'op|1': '操作',
-					,'test|10': 'test'
+					,'test|13': 'test'
 				}
 			]
 		}
@@ -39,12 +37,13 @@ define(function(require, exports){
 
 	var Main = view.container.extend({
 		afterBuild: function(){
-			var con = $('<div class="mt20 ml20"></div>');
-			con.width(1000);
+			var con = $('<div></div>');
+			// con.width(1000);
 			// var con = this.$el;
-			con.height(500);
+			// con.height(500);
 
-			this.createAsync('grid2', 'common/grid.main', {
+
+			this.createAsync('highGrid', '@base/testGrid.main', {
 				target: con,
 				data: data,
 				cols: [
@@ -66,7 +65,60 @@ define(function(require, exports){
 				hasSelect: true
 			});
 
-			this.append(con)
+			this.append(con);
+
+			var setData = $('<input type="button" value="setData"/>').appendTo(this.$el);
+			this.uiBind(setData, 'click', 'eventSetdata');
+			var getIds = $('<input type="button" value="getValue" class="ml10"/>').appendTo(this.$el);
+			this.uiBind(getIds, 'click', 'eventGetValue');
+			var setValue = $('<input type="button" value="setValue" class="ml10"/>').appendTo(this.$el);
+			this.uiBind(setValue, 'click', 'eventSetValue');
+			var highlight = $('<input type="button" value="highlight" class="ml10"/>').appendTo(this.$el);
+			this.uiBind(highlight, 'click', 'eventHighlight');
+		},
+		eventSetdata: function(ev){
+			var data = Mock.mock(
+				{
+					'amount|7': {
+						'cpc|10000-200000000': 100,
+						'cpm|1-1000': 100,
+						'cpa|1-100': 100,
+						'clicks|1-10': 100,
+						'regs|1-10': 100,
+						'rate|1-10': 100,
+						'price|1-10': 100
+					},
+					'items|1-18': [
+						{
+							'id|+1': 1,
+							'name|0-10': 'test',
+							'cpc|10-100000': 100,
+							'cpm|10-100000': 100,
+							'cpa|10-100000': 100,
+							'clicks|1-1000': 100,
+							'regs|1-100': 100,
+							'rate|1-100': 100,
+							'price|1-100': 100,
+							'test|1-23': 'test'
+						}
+					]
+				}
+			);
+			this.$.highGrid.setData(data);
+			return false;
+		},
+		eventGetValue: function(ev){
+			var data = this.$.highGrid.getValue();
+			console.log(data)
+			return false;
+		},
+		eventSetValue: function(ev){
+			this.$.highGrid.setValue({selects:[1,3,4,5]});
+			return false;
+		},
+		eventHighlight: function(ev){
+			this.$.highGrid.setValue({highlights:[2]});
+			return false;
 		}
 	});
 	exports.main = Main;

@@ -2,9 +2,10 @@ define(function(require, exports){
 	var $ = require('jquery');
 	var pubjs = require('@core/pub');
 	var view = require('@base/view');
-	var common = require('@base/common/base')
+	var common = require('@base/common/base');
+	var util = require('util');
 
-	var GridV2 = view.container.extend({
+	var HighGrid = view.container.extend({
 		init: function(config, parent){
 			config = pubjs.conf(config, {
 				data: [],
@@ -21,43 +22,43 @@ define(function(require, exports){
 		},
 		afterBuild: function(){
 			var layout = $([
-				'<div class="grid">',
-					'<div class="fl gridLayoutLeft">',
-						'<div class="gridCorner"></div>',
-						'<div class="gridSidebar"></div>',
+				'<div class="M-HighGrid">',
+					'<div class="fl M-HighGridLayoutLeft">',
+						'<div class="M-HighGridCorner"></div>',
+						'<div class="M-HighGridSidebar"></div>',
 					'</div>',
-					'<div class="gridLayoutRight">',
-						'<div class="gridHeader"></div>',
-						'<div class="gridContent"></div>',
+					'<div class="M-HighGridLayoutRight">',
+						'<div class="M-HighGridHeader"></div>',
+						'<div class="M-HighGridContent"></div>',
 					'</div>',
 				'</div>'
 			].join(''));
 
 			var doms = this.$doms = {
-				tableCorner: layout.find('.gridCorner'),
-				tableHeader: layout.find('.gridHeader'),
-				tableSidebar: layout.find('.gridSidebar'),
-				tableContent: layout.find('.gridContent')
+				corner: layout.find('.M-HighGridCorner'),
+				header: layout.find('.M-HighGridHeader'),
+				sidebar: layout.find('.M-HighGridSidebar'),
+				content: layout.find('.M-HighGridContent')
 			}
 
-			this.buildTableCorner().appendTo(doms.tableCorner);
-			this.buildTableHeader().appendTo(doms.tableHeader);
-			this.buildTableSidebar().appendTo(doms.tableSidebar);
-			this.buildTableContent().appendTo(doms.tableContent);
+			this.buildTableCorner().appendTo(doms.corner);
+			this.buildTableHeader().appendTo(doms.header);
+			this.buildTableSidebar().appendTo(doms.sidebar);
+			this.buildTableContent().appendTo(doms.content);
 
 			// 创建滚动条
 			var scrollerV = this.create('scrollerV', common.scroller, {
 				dir: 'V',
 				pad: false, // 取消滚动条间隔，使之浮在内容的上面
-				target: layout.find('.gridContent'),
-				content:  layout.find('.gridContent table')
+				target: layout.find('.M-HighGridContent'),
+				content:  layout.find('.M-HighGridContent table')
 			});
 			var scrollerH = this.create('scrollerH', common.scroller, {
 				dir: 'H',
 				pad: false,
 				wheel: false,
-				target: layout.find('.gridContent'),
-				content:  layout.find('.gridContent table')
+				target: layout.find('.M-HighGridContent'),
+				content:  layout.find('.M-HighGridContent table')
 			});
 
 			this.append(layout);
@@ -74,14 +75,16 @@ define(function(require, exports){
 			var cols = c.cols;
 
 			// 自动根据hasSelect参数插入选择列
-			if(c.hasSelect){
+			// 如果已有自定义的select，则不会重复添加
+			var repeat = util.find(c.cols, 'select', 'type');
+			if(c.hasSelect && !repeat){
 				cols.unshift({"type":"select","name":"sel"});
 			}
 
 			var dom = $([
 				'<table cellspacing="0" cellpadding="0">',
-					'<tr class="gridCornerHook"></tr>',
-					'<tr class="gridCornerAmount">',
+					'<tr class="M-HighGridCornerHook"></tr>',
+					'<tr class="M-HighGridCornerAmount">',
 						c.hasAmount ? '<td colspan="'+cols.length+'">汇总</td>' : '',
 					'</tr>',
 				'</table>'
@@ -97,7 +100,7 @@ define(function(require, exports){
 				}
 
 				el = this.buildTd({
-					'class': 'gridCornerTitle',
+					'class': 'M-HighGridCornerTitle',
 					'text': cols[i].text,
 					'html': html
 				})
@@ -106,7 +109,9 @@ define(function(require, exports){
 				// 清除变量
 				html = '';
 			}
-			dom.find('.gridCornerHook').append(td);
+			dom.find('.M-HighGridCornerHook').append(td);
+			// 绑定全选框事件
+			this.uiBind(dom.find('input[type="checkbox"]'), 'click', 'eventSelectAll');
 			return dom;
 		},
 		buildTableHeader: function(){
@@ -116,8 +121,8 @@ define(function(require, exports){
 
 			var html = $([
 				'<table cellspacing="0" cellpadding="0">',
-					'<tr class="gridHeaderTitle"></tr>',
-					'<tr class="gridHeaderAmount"></tr>',
+					'<tr class="M-HighGridHeaderTitle"></tr>',
+					'<tr class="M-HighGridHeaderAmount"></tr>',
 				'</table>'
 			].join(''));
 
@@ -143,11 +148,11 @@ define(function(require, exports){
 					amount.push(elAmount);
 				}
 			}
-			html.find('.gridHeaderTitle').append(title);
+			html.find('.M-HighGridHeaderTitle').append(title);
 
 			// 总计模块
 			if(c.hasAmount){
-				html.find('.gridHeaderAmount').append(amount);
+				html.find('.M-HighGridHeaderAmount').append(amount);
 			}
 
 			return html;
@@ -162,14 +167,15 @@ define(function(require, exports){
 			if(datas){
 				var tr, td;
 				var data;
-				var html, width, isIndexCol, title, type, column;
+				var html, width, isIndexCol, title, type, column, hasDataType;
 				var className = '';
 
 				for (i = 0; i < datas.length; i++) {
 					data = datas[i];
 
 					tr = this.buildTr({
-						'class': (i%2!==0) ? 'gridSidebarName' : 'gridSidebarName even'
+						'dataId': data.id,
+						'class': (i%2!==0) ? 'M-HighGridSidebarName' : 'M-HighGridSidebarName even'
 					});
 
 					for (var ii = 0; ii < cols.length; ii++) {
@@ -179,13 +185,15 @@ define(function(require, exports){
 
 						// 选择列
 						if(column.type == 'select'){
-							html = '<input type="checkbox" />';
+							html = '<input type="checkbox"/>';
+							hasDataType = true;
 						}
 
 						// 操作列
 						if(column.type == 'op'){
-							html = '<span class="gridSidebarMenu"/>';
-							className += ' center';
+							html = '<span class="M-HighGridSidebarMenu"/>';
+							className += ' tc';
+							hasDataType = true;
 						}
 
 						if(column.render){
@@ -210,11 +218,12 @@ define(function(require, exports){
 							'width': width,
 							'class': className,
 							'title': title,
-							'type': type
+							'type': type,
+							'dataType': hasDataType ? column.type : null
 						});
 						tr.append(td);
 						// 清除变量
-						html = width = className = type= title= '';
+						html = width = className = type= title = hasDataType= '';
 					}
 					dom.append(tr);
 				}
@@ -223,8 +232,10 @@ define(function(require, exports){
 				for (i = 0; i < cols.length; i++) {
 					tds.push('<td>-</td>');
 				}
-				dom.append($('<tr class="gridSidebarName even"></tr>').append(tds));
+				dom.append($('<tr class="M-HighGridSidebarName even"></tr>').append(tds));
 			}
+			// 绑定选择框事件
+			this.uiProxy(dom, 'input[type="checkbox"]', 'click', 'eventCheckboxClick');
 			return dom;
 		},
 		buildTableContent: function(){
@@ -237,7 +248,8 @@ define(function(require, exports){
 				for (var i = 0; i < data.length; i++) {
 
 					tr = this.buildTr({
-						'class': (i===0 )? 'gridContentFirstTr even': ((i%2 === 0)?'even':'')
+						'dataId': data[i].id,
+						'class': (i===0 )? 'M-HighGridContentFirstTr even': ((i%2 === 0)?'even':'')
 					});
 
 					for (var ii = 0; ii < cols.length; ii++) {
@@ -275,7 +287,10 @@ define(function(require, exports){
 				con.attr('title', c.title);
 			}
 			if(c.html){
-				con.html(c.html)
+				con.html(c.html);
+			}
+			if(c.dataType){
+				con.attr('data-type', c.dataType);
 			}
 
 			return td;
@@ -291,7 +306,9 @@ define(function(require, exports){
 			if(c.html){
 				tr.html(c.html)
 			}
-
+			if(c.dataId){
+				tr.attr('data-id', c.dataId);
+			}
 			return tr;
 		},
 		calculate: function(isReset){
@@ -305,10 +322,10 @@ define(function(require, exports){
 				colsLen = c.cols.length;
 
 			// DOM实例
-			var header = wrap.find('.gridHeader'),
-				content = wrap.find('.gridContent'),
-				sidebar = wrap.find('.gridSidebar'),
-				corner = wrap.find('.gridCorner');
+			var header = wrap.find('.M-HighGridHeader'),
+				content = wrap.find('.M-HighGridContent'),
+				sidebar = wrap.find('.M-HighGridSidebar'),
+				corner = wrap.find('.M-HighGridCorner');
 
 			var sum = 0,		// 总数
 				i,
@@ -317,8 +334,8 @@ define(function(require, exports){
 				elT, elD, elL, elR;	// DOM对象
 
 			// 同步高度-汇总模块
-			elL = wrap.find('.gridCornerAmount');
-			elR = wrap.find('.gridHeaderAmount');
+			elL = wrap.find('.M-HighGridCornerAmount');
+			elR = wrap.find('.M-HighGridHeaderAmount');
 			elL.height(elR.height());
 
 			// 同步高度-下侧
@@ -339,21 +356,21 @@ define(function(require, exports){
 
 			// 同步宽度-左侧
 			for (i = 0; i < colsLen; i++) {
-				elT = wrap.find('.gridCornerTitle:eq('+i+')');
-				elD = wrap.find('.gridSidebar td:eq('+i+')');
+				elT = wrap.find('.M-HighGridCornerTitle:eq('+i+')');
+				elD = wrap.find('.M-HighGridSidebar td:eq('+i+')');
 				max = this._getMax(elT.width(), elD.width());
 				elT.width(max);
 				elD.width(max);
 			}
 			// 设置主内容模块的左边距值
-			var conLeftWidth = wrap.find('.gridLayoutLeft').width();
-			wrap.find('.gridLayoutRight').css('margin-left', conLeftWidth);
+			var conLeftWidth = wrap.find('.M-HighGridLayoutLeft').width();
+			wrap.find('.M-HighGridLayoutRight').css('margin-left', conLeftWidth);
 
 			var className = '';
 			// 清零
 			if(isReset){
 				console.log('--- Beginning reset ---');
-				$('.gridLayoutLeft').removeClass('shadow'); // 清除滚动阴影
+				$('.M-HighGridLayoutLeft').removeClass('shadow'); // 清除滚动阴影
 				header.find('table').css('width', 'inherit');
 				content.find('table').css('width', 'inherit');
 				header.css('min-width', 0);
@@ -365,9 +382,9 @@ define(function(require, exports){
 				// 清零右侧宽度
 				for (i = 0; i < indexLen; i++) {
 					// 总计模块
-					className = c.hasAmount ? 'gridHeaderAmount' : 'gridHeaderTitle';
+					className = c.hasAmount ? 'M-HighGridHeaderAmount' : 'M-HighGridHeaderTitle';
 					elT = wrap.find('.'+className).find('td:eq('+i+')');
-					elD = wrap.find('.gridContentFirstTr td:eq('+i+')');
+					elD = wrap.find('.M-HighGridContentFirstTr td:eq('+i+')');
 					elT.css('width', 'auto');
 					elD.css('width', 'auto');
 				}
@@ -376,9 +393,9 @@ define(function(require, exports){
 			// 同步宽度-右侧
 			for (i = 0; i < indexLen; i++) {
 				// 总计模块
-				className = c.hasAmount ? 'gridHeaderAmount' : 'gridHeaderTitle';
+				className = c.hasAmount ? 'M-HighGridHeaderAmount' : 'M-HighGridHeaderTitle';
 				elT = wrap.find('.'+className).find('td:eq('+i+')');
-				elD = wrap.find('.gridContentFirstTr td:eq('+i+')');
+				elD = wrap.find('.M-HighGridContentFirstTr td:eq('+i+')');
 				space = elT.outerWidth() - elT.width();
 				max = this._getMax(elT.width(), elD.width());
 				sum = sum + max + space;
@@ -392,13 +409,126 @@ define(function(require, exports){
 			// 防止resize后重计算时，实际内容框挤出了外框。
 			content.css('max-width',sum);
 		},
+		getValue: function(){
+			var data = {};
+			var tr;
+
+			// 选中ids
+			tr = this.$doms.sidebar.find('.M-HighGridRowSelected');
+			if(tr.length){
+				data.selects = this._getIds(tr, 'data-id');
+			}
+
+			// 高亮ids
+			tr = this.$doms.sidebar.find('.M-HighGridRowHighlight');
+			if(tr.length){
+				data.hightlights = this._getIds(tr, 'data-id');
+			}
+			return data;
+		},
+		/**
+		 * 内部函数-根据指定的属性，过滤出ids
+		 * @param  {Oject} 	dom   	jQuery DOM对象
+		 * @param  {String} field 	属性名
+		 * @return {Array}       	ids
+		 */
+		_getIds: function(dom, field){
+			var ids = [];
+			for (var i = 0; i < dom.length; i++) {
+				ids.push($(dom[i]).attr(field));
+			}
+			return ids;
+		},
+		/**
+		 * 设置选中数据
+		 * @param {Object} selects: [], hightlights: []
+		 */
+		setValue: function(config){
+			var data = this.$data && this.$data.items || 0;
+			var ids, i;
+
+			// 设置选中状态
+			if(config.selects){
+				ids = config.selects;
+				var sels = [];
+				for (i = 0; i < ids.length; i++) {
+					sels.push(util.find(data, ids[i], 'id'));
+					this._updateRowState(ids[i], 'M-HighGridRowSelected', true);
+				}
+				this.$sels = sels;
+
+			}
+			// 设置高亮状态
+			if(config.highlights){
+				ids = config.highlights;
+				for (i = 0; i < ids.length; i++) {
+					this._updateRowState(ids[i], 'M-HighGridRowHighlight', true);
+				}
+			}
+		},
+		setData: function(data){
+			this.reset();
+			this.$data = data;
+			this.afterBuild();
+		},
+		getData: function(data){
+			return this.$data;
+		},
+		reset: function(){
+			this.$data = null;
+			this.$.scrollerH.destroy();
+			this.$.scrollerV.destroy();
+			this.$el.empty();
+		},
+		// 复选框点击事件
+		eventCheckboxClick: function(ev, dom){
+			var data = this.$data && this.$data.items || [];
+			var tr = $(dom).parents('tr');
+			var id = tr.attr('data-id');
+			var isSelected = $(dom).attr('checked');
+
+			// 添加行选中样式
+			var toggleClass = isSelected ? 'addClass' : 'removeClass';
+			tr[toggleClass]('M-HighGridRowSelected');
+			this.$doms.content.find('tr[data-id="'+id+'"]')[toggleClass]('M-HighGridRowSelected');
+
+			// return false; // 会阻止了checkbox的默认勾选事件
+		},
+		eventSelectAll: function(ev, dom){
+			var doms = this.$doms;
+			var trLeft = doms.sidebar.find('tr');
+			var trRight = doms.content.find('tr');
+
+			var isSelected = $(dom).attr('checked')? true: false;
+			var toggleClass = isSelected ? 'addClass' : 'removeClass';
+
+			var className = 'M-HighGridRowSelected';
+			trLeft[toggleClass](className);
+			trRight[toggleClass](className);
+			trLeft.find('input[type="checkbox"]').prop('checked', isSelected);
+
+			// return false; // 会阻止了checkbox的默认勾选事件
+		},
+		// 更新行样式
+		_updateRowState: function(id, className, isSelected){
+			var doms = this.$doms;
+			var trLeft = doms.sidebar.find('tr[data-id="'+id+'"]');
+			var trRight = doms.content.find('tr[data-id="'+id+'"]');
+
+			var toggleClass = isSelected ? 'addClass' : 'removeClass';
+			trLeft[toggleClass](className);
+			trRight[toggleClass](className);
+			if(className == 'M-HighGridRowSelected'){
+				trLeft.find('input[type="checkbox"]').prop('checked', isSelected);
+			}
+		},
 		// 滚动条响应事件
 		onScroll: function(ev){
 			var scrollerH = this.$.scrollerH;
 			var scrollerV = this.$.scrollerV
 
-			var header = this.$el.find('.gridHeader');
-			var sidebar = this.$el.find('.gridSidebar');
+			var header = this.$el.find('.M-HighGridHeader');
+			var sidebar = this.$el.find('.M-HighGridSidebar');
 
 			var left = scrollerH.getScrollPos();
 			var top = scrollerV.getScrollPos();
@@ -406,7 +536,7 @@ define(function(require, exports){
 			header.scrollLeft(left);
 			sidebar.scrollTop(top);
 
-			var el = $('.gridLayoutLeft');
+			var el = $('.M-HighGridLayoutLeft');
 			if(left){
 				el.addClass('shadow');
 			}else{
@@ -419,7 +549,7 @@ define(function(require, exports){
 			var self = this;
 			this.calculate(true);
 			setTimeout(function(){
-				console.log('grid mod SYSResize')
+				console.log('M-HighGrid mod SYSResize')
 				self.$.scrollerV.update();
 				self.$.scrollerH.update();
 			}, 0);
@@ -433,6 +563,13 @@ define(function(require, exports){
 			this.$.scrollerV.update();
 			return false;
 		},
+		// 右侧工具栏状态变动响应事件
+		onToolsToggle: function(ev){
+			this.calculate(true);
+			this.$.scrollerH.update();
+			this.$.scrollerV.update();
+			return false;
+		},
 		renderName: function(i, val, data, con){
 			return $('<div class="uk-text-truncate left" title="'+val+'">'+val+'</div>').width(con.width);
 		},
@@ -441,5 +578,5 @@ define(function(require, exports){
 			return a>b ? a : b;
 		}
 	});
-	exports.main = GridV2;
+	exports.main = HighGrid;
 });
