@@ -1,11 +1,9 @@
-.grid{
-	font-family: "Microsoft YaHei",Arial, Helvetica, sans-serif;
-	background: #F8F8F8;
-	overflow: hidden;
-	font-size: 13px;
+.M-HighGrid{
 	color: #444;
-	text-align: right;
-	border: 1px solid #eaeaea;
+	font-size: 13px;
+	overflow: hidden;
+	background: #FFFFFF;
+	font-family: "Microsoft YaHei", Arial, Helvetica, sans-serif;
 
 	table{
 		border-collapse: separate;
@@ -14,119 +12,180 @@
 	td{
 		padding: 0 12px;
 		overflow: hidden;
-		line-height: inherit; // 为了重置unkit的line-height值
 		white-space: nowrap;
+		line-height: inherit; // 为了重置unkit的line-height值
 
 		// -moz-box-sizing: border-box;
 		// -webkit-box-sizing:border-box;
 		// box-sizing: border-box;
 	}
-
-	&Corner{
-		background: #f8f8f8;
-		&Hook{
-			line-height: 40px;
-			text-align: center;
-			td{
-				border-right: 1px solid transparent;
-				border-bottom: 1px solid #c8cdcc;
+	// 刷新控件
+	&Refresh {
+		&Auto{
+			background-color: #eeeeee;
+			font-size: 13px;
+			color: #444;
+			padding: 9px 7px;
+			margin-right: 2px;
+			i{
+				.icon;
+				.icon-refreshAuto;
+				display: inline-block;
+				margin-right: 2px;
+				&.act{
+					.icon-act;
+				}
 			}
 		}
-		&Amount{
+		button {
+			padding: 0 7px;
+			min-height: 25px;
+			line-height: 25px;
+
+			em {
+				// width:16px;
+				// height:16px;
+				display:block;
+			}
+		}
+		.refNormal{
+			padding: 0 5px;
+			em {
+				.icon;
+				.icon-refreshManual;
+				// padding: 6px;
+				// background:url("../images/refresh.png") 0 0 no-repeat;
+			}
+		}
+		.refing em {
+			background:url("../images/loading.gif") 0 0 no-repeat;
+		}
+	}
+
+	&List{
+		text-align: right;
+		background: #F8F8F8;
+		border: 1px solid #eaeaea;
+		&Corner{
+			background: #f8f8f8;
+			&Title{
+				line-height: 40px;
+				text-align: center;
+				td{
+					border-bottom: 1px solid #c8cdcc;
+					border-right: 1px solid transparent;
+				}
+			}
+			&Amount{
+				z-index: 1;
+				overflow: hidden;
+				position: relative;
+				text-align: center;
+				td{
+					border-right: 1px solid #eaeaea;
+					border-bottom: 1px solid #eaeaea;
+				}
+			}
+		}
+		&Header{
+			overflow:hidden;
+			background: #f8f8f8;
+			table{
+				min-width: 100%;
+			}
+			&Title{
+				line-height: 40px;
+				text-align: center;
+				td{
+					border-bottom: 1px solid #c8cdcc;
+					border-right: 1px solid transparent;
+				}
+			}
+			&Amount{
+					line-height: 60px;
+					td{
+						border: solid #EAEAEA;
+						border-width: 0 1px 1px 0;
+					}
+			}
+		}
+		&Sidebar{
 			z-index: 1;
 			overflow: hidden;
 			position: relative;
-			text-align: center;
+			tr{
+				line-height: 40px;
+			}
+			tr.even{
+				background: #ffffff;
+			}
 			td{
-				border-bottom: 1px solid #eaeaea;
-				border-right: 1px solid #eaeaea;
+				border: solid #EAEAEA;
+				border-width: 0 1px 1px 0;
+			}
+			// 操作图标
+			&Menu{
+				.icon;
+				.icon-highGridOperation;
+				display: inline-block;
+			}
+		}
+		&Content{
+			// overflow: auto;
+			position:relative;
+			table{
+				min-width: 100%;
+			}
+			tr{
+				line-height: 40px;
+			}
+			tr.even{
+				background: #ffffff;
+			}
+			td{
+				border: solid #EAEAEA;
+				border-width: 0 1px 1px 0;
 			}
 		}
 	}
-	&Header{
-		overflow:hidden;
-		background: #f8f8f8;
-		table{
-			min-width: 100%;
-		}
-		&Title{
-			line-height: 40px;
-			text-align: center;
-			td{
-				border-right: 1px solid transparent;
-				border-bottom: 1px solid #c8cdcc;
-			}
-		}
-		&Amount{
-				line-height: 60px;
-				td{
-					border: solid #EAEAEA;
-					border-width: 0 1px 1px 0;
-				}
-		}
-	}
-	&Sidebar{
-		overflow: hidden;
-		position: relative;
-		z-index: 1;
-		tr{
-			line-height: 40px;
-		}
-		tr.even{
-			background: #ffffff;
-		}
-		td{
-			border: solid #EAEAEA;
-			border-width: 0 1px 1px 0;
-		}
-		// 操作图标
-		&Menu{
-			background: url('img/menu.png') 0 0 no-repeat;
-			padding: 7px;
-			display: inline-block;
 
-		}
-	}
-	&Content{
-		// overflow: auto;
-		position:relative;
-		table{
-			min-width: 100%;
-		}
-		tr{
-			line-height: 40px;
-		}
-		tr.even{
-			background: #ffffff;
-		}
-		td{
-			border: solid #EAEAEA;
-			border-width: 0 1px 1px 0;
-		}
-	}
-	.gridLayoutLeft{
+	.M-HighGridListLayoutLeft{
 		z-index: 2;
 		overflow: hidden;
 		position: relative;
 	}
-	.gridLayoutLeft:before {
-		// box-shadow: 7px 0 18px -12px inset;
-		box-shadow: 7px 0 18px -12px inset;
+	.M-HighGridListLayoutLeft:before {
+		top: 0;
+		width: 15px;
 		content: " ";
 		height: 100%;
 		right: -15px;
 		position: absolute;
-		top: 0;
-		width: 15px;
+		box-shadow: 7px 0 18px -12px inset;
+		// box-shadow: 7px 0 18px -12px inset;
 	}
-	.gridLayoutRight{
-		.scrollerPadding{
-			padding-right: 12px;
-		}
-	}
-
 	.shadow{
 		overflow: visible;
 	}
+	// 状态
+	.running{
+		.icon;
+		.icon-running;
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.pause{
+		.icon;
+		.icon-pause;
+		display: inline-block;
+		vertical-align: middle;
+	}
+}
 
+.M-HighGridListRowSelected{
+	font-weight: bold;
+	// color: #000;
+}
+.M-HighGridListRowHighlight{
+	background: #FFF4D7 !important;
 }
